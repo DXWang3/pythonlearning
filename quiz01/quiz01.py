@@ -11,7 +11,7 @@ def harmonic(x, y):
 
     """
     if (x == 0 or y == 0): 
-        assert ('One of the terms is 0!')       
+        assert x != 0 and y != 0 ,'One of the terms is 0!'     
 
     return 2/((1/x)+(1/y)) 
     
