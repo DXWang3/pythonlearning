@@ -10,11 +10,13 @@ def harmonic(x, y):
 
 
     """
-    if (x != 0 and y !=0): 
-          harmonic = 2/((1/x)+(1/y)) 
-          return harmonic
+    if (x == 0 or y == 0): 
+        assert ('One of the terms is 0!')       
 
-    return None
+    return 2/((1/x)+(1/y)) 
+    
+
+    
 
 from math import pi
 import math
