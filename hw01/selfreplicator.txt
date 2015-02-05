@@ -1,0 +1,4 @@
+First, write down the sentence expressed in the quote after this. Then, copy the first two statements including this one in quotes."First, write down the sentence expressed in the quote after this. Then, copy the first two statements including this one in quotes." 
+
+
+The above is an example, in English, of a self-replicating program like the one in the Challenge problem. The key, I think is that the *output also contains the instruction.* Thus I think eval() is critical since inputing a string into it will cause it to execute the commands represented by the string as if it was a python code. repr() will return string literals in quotes, which makes me think that invoking eval(repr(x)), where x is the defined instruction, shows up in both in the print statement as well as in the variable definiton of x.                                 
