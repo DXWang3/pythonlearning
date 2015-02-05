@@ -7,3 +7,6 @@ The above is an example, in English, of a self-replicating program like the one 
  x="print('x'+'='+eval(repr('\"'))+x+eval(repr('\"'))+'; '+x)"; print('x'+'='+eval(repr('\"'))+x+eval(repr('\"'))+'; '+x) 
 
 This is as close as I've gotten.
+
+
+EDIT: Finished!  x='print("x"+"="+repr(x)+"; "+x)'; print("x"+"="+repr(x)+"; "+x)
