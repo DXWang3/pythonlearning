@@ -1,15 +1,8 @@
-from math import log
-
 def square(x):
     return x * x
 
 def triple(x):
     return 3 * x
-
-def combine(f, g):
-    def h(x):
-        return f(g(x))
-    return h
 
 def identity(x):
     return x
@@ -55,14 +48,20 @@ def repeated(f, n):
     >>> repeated(square, 4)(5) # square(square(square(square(5))))
     152587890625
     """
-     
-    
-    b = f
+      
+    def combine(f, g):
 
-    for i in range(1, n):
-        b = compose1(f, b)
-        n+=1
-    return b
+        def h(x):
+            H = 0
+            H = f(g(x))
+        return H
+
+    
+
+    for i in range(n, 1):
+        f = combine(f, f)
+        n-=1
+    return f
 
 
 def compose1(f, g):
@@ -75,8 +74,6 @@ def compose1(f, g):
 # Church Numerals #
 ###################
 
-import math
-
 def zero(f):
     return lambda x: x
 
@@ -85,11 +82,11 @@ def successor(n):
 
 def one(f):
     """Church numeral 1: same as successor(zero)"""
-    return lambda x: f(x)
+    "*** YOUR CODE HERE ***"
 
 def two(f):
     """Church numeral 2: same as successor(successor(zero))"""
-    return lambda x: f(f(x))
+    "*** YOUR CODE HERE ***"
 
 three = successor(two)
 
@@ -105,12 +102,7 @@ def church_to_int(n):
     >>> church_to_int(three)
     3
     """
-
-        
-    return int(log(n(lambda x: 2*x)(1), 2))   
-   
-    
-    
+    "*** YOUR CODE HERE ***"
 
 def add_church(m, n):
     """Return the Church numeral for m + n, for Church numerals m and n.
@@ -118,8 +110,7 @@ def add_church(m, n):
     >>> church_to_int(add_church(two, three))
     5
     """
-    h = lambda f: lambda x: compose1(m(f), n(f))(x)
-    return h 
+    "*** YOUR CODE HERE ***"
 
 def mul_church(m, n):
     """Return the Church numeral for m * n, for Church numerals m and n.
@@ -130,15 +121,7 @@ def mul_church(m, n):
     >>> church_to_int(mul_church(three, four))
     12
     """
-    b = church_to_int(n)
-    c = m
-    while b > 1: 
-              
-       c = add_church(c , m) 
-       b = b - 1
-        
-    return c
-
+    "*** YOUR CODE HERE ***"
 
 def pow_church(m, n):
     """Return the Church numeral m ** n, for Church numerals m and n.
@@ -148,12 +131,5 @@ def pow_church(m, n):
     >>> church_to_int(pow_church(three, two))
     9
     """
-
-    b = church_to_int(n)
-    c = m
-    while b > 1:
-
-       c = mul_church(c, m)
-       b = b - 1
-    return c  
+    "*** YOUR CODE HERE ***"
 
