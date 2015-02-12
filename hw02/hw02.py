@@ -130,14 +130,11 @@ def mul_church(m, n):
     >>> church_to_int(mul_church(three, four))
     12
     """
-    b = church_to_int(n)
-    c = m
-    while b > 1: 
-              
-       c = add_church(c , m) 
-       b = b - 1
-        
-    return c
+    
+    return  compose1(m, n)
+
+
+
 
 
 def pow_church(m, n):
@@ -149,11 +146,11 @@ def pow_church(m, n):
     9
     """
 
-    b = church_to_int(n)
-    c = m
-    while b > 1:
 
-       c = mul_church(c, m)
-       b = b - 1
-    return c  
+    return n(m)
+
+
+  
+   
+    
 
