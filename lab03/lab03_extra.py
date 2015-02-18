@@ -1,4 +1,12 @@
 # Q9
+
+def compose(f, g):
+
+    def h(x): 
+         return f(g(x))
+    return h
+
+
 def cycle(f1, f2, f3):
     """ Returns a function that is itself a higher order function
     >>> def add1(x):
@@ -24,7 +32,37 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
+    
+    def result(n):
+        if n % 3 == 0:
+           a = f3
+        
+        if n % 3 == 1:
+           a = f1
+
+        if n % 3 == 2:
+           a = f2
+        
+        if n == 0:
+           return lambda x:x
+         
+        elif n == 1:
+           return f1
+        
+        elif n == 2:
+           return compose(f2, f1)
+        
+        elif n == 3:
+           return compose(f3, compose(f2, f1))
+
+        else: 
+           return compose(a, result(n-1))
+
+
+    return result
+          
+    
+    
 
 # Q10
 def lambda_curry2(func):
@@ -36,8 +74,8 @@ def lambda_curry2(func):
     >>> y(5)
     8
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+
+    return lambda x: lambda y: func(x, y)
 
 # Q12
 def paths(m, n):
@@ -53,7 +91,12 @@ def paths(m, n):
     >>> paths(1, 157)
     1
     """
-    "*** YOUR CODE HERE ***"
+    if m == 1: 
+       return 1
+    if n == 1: 
+       return 1
+    
+    return paths(m, n-1) + paths(m-1, n)
 
 # Q13
 def gcd(a, b):
@@ -69,4 +112,10 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    
+    if a == 0: 
+       return b
+    elif b == 0: 
+       return a
+
+    return gcd(b, (a % b))
