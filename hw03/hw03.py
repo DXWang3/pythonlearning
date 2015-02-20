@@ -202,4 +202,6 @@ def make_anonymous_factorial():
     >>> make_anonymous_factorial()(5)
     120
     """
-    return 'YOUR_EXPRESSION_HERE'
+    
+    U = lambda f: lambda g: f(g)
+    return U(lambda f: lambda n: 1 if n == 1 else mul(n, U(f)(f)(sub(n , 1))))(lambda f: lambda n: 1 if n == 1 else mul(n, U(f)(f)(sub(n , 1))))
