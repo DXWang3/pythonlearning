@@ -68,7 +68,8 @@ def sub_interval(x, y):
     '-9 to -2'
     """
 
-    return [x[0] - y[1], x[1] - y[0]]
+    opposite_y = interval(-upper_bound(y), -lower_bound(y))
+    return add_interval(x, opposite_y)
 
 def par1(r1, r2):
     return div_interval(mul_interval(r1, r2), add_interval(r1, r2))
@@ -82,6 +83,10 @@ def par2(r1, r2):
 # These two intervals give different results for parallel resistors:
 "*** YOUR CODE HERE ***"
 
+def test():
+
+    print(str_interval(par1(interval(6,8), interval(7,9))))
+  
 def multiple_references_explanation():
     return """The mulitple reference problem..."""
 
@@ -99,8 +104,8 @@ def quadratic(x, a, b, c):
     '0 to 10'
     """
    
-    t = x[0]
-    r = x[1]
+    t = lower_bound(x)
+    r = upper_bound(x)
     q = -b/(2*a)
 
     if q <= r and q >= t:
