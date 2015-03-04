@@ -1,8 +1,8 @@
 def interval(a, b):
     """Construct an interval from a to b."""
 
-    lst = [a, b]
-    return lst
+   
+    return [a, b]
 
 def lower_bound(x):
     """Return the lower bound of interval x."""
@@ -16,7 +16,6 @@ def upper_bound(x):
 
 def str_interval(x):
     """Return a string representation of interval x.
-
     >>> str_interval(interval(-1, 2))
     '-1 to 2'
     """
@@ -25,7 +24,6 @@ def str_interval(x):
 def add_interval(x, y):
     """Return an interval that contains the sum of any value in interval x and
     any value in interval y.
-
     >>> str_interval(add_interval(interval(-1, 2), interval(4, 8)))
     '3 to 10'
     """
@@ -36,7 +34,6 @@ def add_interval(x, y):
 def mul_interval(x, y):
     """Return the interval that contains the product of any value in x and any
     value in y.
-
     >>> str_interval(mul_interval(interval(-1, 2), interval(4, 8)))
     '-8 to 16'
     """
@@ -49,9 +46,7 @@ def mul_interval(x, y):
 def div_interval(x, y):
     """Return the interval that contains the quotient of any value in x divided
     by any value in y.
-
     Division is implemented as the multiplication of x by the reciprocal of y.
-
     >>> str_interval(div_interval(interval(-1, 2), interval(4, 8)))
     '-0.25 to 0.5'
     """
@@ -63,7 +58,6 @@ def div_interval(x, y):
 def sub_interval(x, y):
     """Return the interval that contains the difference between any value in x
     and any value in y.
-
     >>> str_interval(sub_interval(interval(-1, 2), interval(4, 8)))
     '-9 to -2'
     """
@@ -85,7 +79,7 @@ def par2(r1, r2):
 
 def test():
 
-    print(str_interval(par1(interval(6,8), interval(7,9))))
+    print(par1(interval(6,8), interval(7,9)) == par2(interval(6,8), interval(7,9)))
   
 def multiple_references_explanation():
     return """The mulitple reference problem..."""
@@ -97,7 +91,6 @@ def multiple_references_explanation():
 def quadratic(x, a, b, c):
     """Return the interval that is the range of the quadratic defined by
     coefficients a, b, and c, for domain interval x.
-
     >>> str_interval(quadratic(interval(0, 2), -2, 3, -1))
     '-3 to 0.125'
     >>> str_interval(quadratic(interval(1, 3), 2, -3, 1))
@@ -123,7 +116,6 @@ def quadratic(x, a, b, c):
 def polynomial(x, c):
     """Return the interval that is the range of the polynomial defined by
     coefficients c, for domain interval x.
-
     >>> str_interval(polynomial(interval(0, 2), [-1, 3, -2]))
     '-3 to 0.125'
     >>> str_interval(polynomial(interval(1, 3), [1, -3, 2]))
@@ -131,7 +123,85 @@ def polynomial(x, c):
     >>> str_interval(polynomial(interval(0.5, 2.25), [10, 24, -6, -8, 3]))
     '18.0 to 23.0'
     """
+ 
+    """ Define f, df, dff """
+    
+ 
+
+    def add_fns(f_and_df, g_and_dg):
+
+        return lambda x, derive: f_and_df(x, derive) + g_and_dg(x, derive)
+
+
+    def f(m):
+        f = lambda m: 0
+
+        for k, i in enumerate(c):
+            f = add_fns(f , (lambda m: (i * (m ** k)))) 
+        return f
+
+    def df(m):
+        df = lambda m: 0
+        for k, i in enumerate(c):
+           if (k > 0):
+              df = add_fns(df, (lambda m: (i * (k - 1) * (m ** (k - 1)))))
+        return df
+    
+    def ddf(m):
+        ddf = lambda m: 0
+        for k, i in enumerate(c):
+           if (k > 1):
+              ddf = add_fns(ddf, (lambda m: (i * (k - 1) * (k - 2) * (m ** (k - 2)))))
+        return ddf        
+
+    """ Implement new x value via Newton method"""
+
+    def newton(f, df):
+
+        def iterate(m):
+            return (m - f(m))/df(m)
+        return iterate
+
+    """ Define when is the approximation close enough to the zero. """
+
+    def bound(x, y, bound = 1e-15):
+
+        
+        if x >= y:
+           return x - y < bound
+        else:
+           return y - x < bound
+
+    """ Returns whether the root is close enough in boolean. """ 
+
+    def close(m):
+
+        return bound(df(m), 0, 1e-15)
 
     
+    
+    """ Progressively implement newton method until value is close enough """
 
+    def increment(iterate, close, guess=1, max_updates = 100):
+         
+        k = 0
+        while not close(guess) and k < max_updates:
+            guess = iterate(guess)
+            k = k + 1
+        return guess
 
+    """ Find the location of the zero. """
+
+    def find_zero(f, df, guess=1):
+
+        def valid(m):
+            return bound(f(m), 0)
+
+        return increment(newton(f, df), valid, guess)
+
+    a = lower_bound(x)
+    b = upper_bound(x) 
+    limit = [find_zero(df, ddf, a + ((b - a) * i / 100)) for i in range(0, 101)]
+    list = [n for n in limit if n > a and n < b]
+    valuelist = [f(d) for d in list]
+    return interval(min(valuelist), max(valuelist))
