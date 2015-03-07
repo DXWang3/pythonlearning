@@ -108,7 +108,40 @@ class VendingMachine:
     >>> v.deposit(15)
     'Machine is out of stock. Here is your $15.'
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, item, price):
+        self.item = item
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def vend(self):
+        balance_and_price_difference = self.balance - self.price
+        is_item_in_stock = True if (self.stock > 0) else False
+        is_enough_money_inputted = True if (balance_and_price_difference >= 0) else False
+
+        if is_item_in_stock and is_enough_money_inputted:
+            self.balance = 0
+            self.stock -= 1
+
+            if balance_and_price_difference == 0:
+                return 'Here is your ' + str(self.item) + '.'
+            return 'Here is your ' + str(self.item) + ' and $' + str(balance_and_price_difference) + ' change.'
+        
+        elif is_item_in_stock:
+            return 'You must deposit $' + str(-balance_and_price_difference) + ' more.'
+        
+        return 'Machine is out of stock.'
+
+    def restock(self, amount):
+        self.stock += amount
+        return 'Current ' + str(self.item) + ' stock: ' + str(self.stock)
+
+    def deposit(self, amount):
+        if self.stock == 0:
+            return 'Machine is out of stock. Here is your $' + str(amount) + '.'
+
+        self.balance += amount
+        return 'Current balance: $' + str(self.balance)
 
 class MissManners:
     """A container class that only forward messages that say please.
@@ -146,5 +179,16 @@ class MissManners:
     >>> fussy_three.ask('please __add__', 4)
     7
     """
-    "*** YOUR CODE HERE ***"
+    def __init__(self, inputted_object):
+        self._object = inputted_object
+
+    def ask(self, caller_input, *args):
+        # store string after initial please
+        method_requested = caller_input[7:]
+        
+        if 'please' not in caller_input.split():
+            return 'You must learn to say please first.'
+        elif hasattr(self._object, method_requested):
+            return getattr(self._object, method_requested)(*args)
+        return 'Thanks for asking, but I know not how to ' + method_requested
 
